@@ -1,4 +1,4 @@
-# Primitive 타입
+# Primitive 타입 (원시데이터)
 
 - 기본적인 데이터 종류
 - 변수명: DataType = 값
@@ -21,9 +21,21 @@ const num_7: number = NaN;
 const str_1 = "안녕";
 const str_2: string = "반가워";
 let str_3: string = "김밥";
+const str_4: string = `백틱`;
 ```
 
 ## 3. boolean 타입
+
+- 프로그래밍에서 false처럼 사용되는 값(falshy한 값)
+- 아래의 경우는 falshy 하다고 판단하여 false로 인정
+```txt
+false
+""          비어있는 문자열은 if문 등에 사용할 때 false로 판단
+0           숫자 0은 if문 등에 사용할 때 false로 판단
+null        if문 등에 사용할 때 false로 판단
+undifined   if문 등에 사용할 때 false로 판단
+NaN         if문 등에 사용할 때 false로 판단
+```
 
 ```ts
 const bool_1 = false;
@@ -33,7 +45,7 @@ let bool_3: boolean = false;
 
 ## 4. null 타입
 
-- 프로그래머가 변수에 값이 비었음을 표현
+- 프로그래머가 변수에 `값이 비었음`을 표현
 
 ```ts
 const null_1 = null;
@@ -43,6 +55,7 @@ let null_2: null = null;
 ## 5. undefined 타입
 
 - 프로그램이 초기값으로 세팅함
+- 값이 없음. 즉, 정의가 안되어 있음
 
 ```ts
 let user: undefined = undefined;
@@ -82,7 +95,7 @@ let b: "안녕" = "안녕";
 let c: true = true;
 ```
 
-## 8. 정말 중복되지 않은 유일한 값
+## 8. 정말 `중복되지 않은 유일한 값`
 
 ```ts
 const sy = Symbol("age");
@@ -108,8 +121,8 @@ const bigIntVar: BigInt = BigInt(99999999);
 ### 10.1. any 타입
 
 - any는 아무 값이나 대입할 수 있음
-- 치트키라고 생각해 보자
-- any는 타입체크를 포기하겠다
+- 치트키라고 생각할 수 있음
+- any는 타입체크를 포기하겠다는 의미
 - 과하게 사용하지 말고 적절하게 사용 권장
 
 ```ts
