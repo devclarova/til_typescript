@@ -7,5 +7,5 @@ function 사용자인증 (auth: boolean, fn: () => void):void {
 }
 // 이용권한이 있습니다. 출력
 사용자인증(true, () => console.log("이용권한이 있습니다."));
-// 권한이 없ㅅ브니다. 출력
+// 권한이 없습니다. 출력
 사용자인증(false, () => console.log("이용권한이 없습니다.")); // 실행되지 않음
