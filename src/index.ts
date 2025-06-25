@@ -220,7 +220,7 @@ const apiData: DataType[] = [
 
 console.log(apiData.length);
 for (let i = 0; i < apiData.length; i++) {
-  console.log(`${i}번째의 내용 ====== `); // 0, 1, 2, 3
+  console.log(`${i}번째의 내용 ======`); // 0, 1, 2, 3
   const data = apiData[i];
 
   // 객체의 모든 요소를 배열로 뽑아내기
