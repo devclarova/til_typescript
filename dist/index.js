@@ -1,15 +1,9 @@
-class Animal {
-  constructor() {
-    this.eye = 2;
+class MathTool {
+  static PI = 3.14;
+  static muliti(x, y) {
+    return x * y;
   }
-  cry() {}
-  eat() {}
 }
 
-class Cat extends Animal {
-  꾹꾹이() {}
-}
-
-class Dog extends Animal {
-  달짖기() {}
-}
+MathTool.PI;
+MathTool.메서드명(5, 6);
