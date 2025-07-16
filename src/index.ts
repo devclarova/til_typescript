@@ -1,8 +1,16 @@
-let numVar: any = 5;
-numVar = "Hello";
-numVar = true;
-numVar = 100;
+interface Animal {
+  name: string;
+  age: number;
+}
+interface Human {
+  name: string;
+  age: number;
+  address: string;
+}
 
-// 강제로 데이터 타입을 지정하기 위한 처리
-let temp = numVar as string;
-temp.toUpperCase(); // 대문자로 바꾸어라
+type AnimalHuman = Animal | Human;
+const temp: AnimalHuman = {
+  address: "대구",
+  age: 20,
+  name: "제니",
+};

@@ -1,18 +1,20 @@
-# ts 심화 - Casting (캐스팅)
+# ts 심화 - Union
 
-- VSCode는 타입을 추론함
-- `특정한 타입으로 추론을 하라고 지시`할 수 있음
-- 강제로 타입을 변환시킴
-- 'as' 문법
-- any를 안쓸 순 없음. 원하는 타입은 as를 활용함
+- 타입을 하나로 병합할 수 있는 방법
 
 ```ts
-let numVar: any = 5;
-numVar = "Hello";
-numVar = true;
-numVar = 100;
+type StringNumberType = string | number;
 
-// 강제로 데이터 타입을 지정하기 위한 처리
-let temp = numVar as string;
-temp.toUpperCase(); // 대문자로 바꾸어라
+let strVar: StringNumberType = "hi";
+strVar = 300;
+
+type NetworkStatus = "DONE" | "LOADING" | "ERROR" | "INIT";
+let state: NetworkStatus = "DONE";
+state = "ERROR";
+state = "LOADING";
+state = "INIT";
+
+type StringNumberArray = string[] | number[];
+let arr: StringNumberArray = [1, 2, 3];
+arr = ["hello", "hi"];
 ```
