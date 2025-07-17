@@ -1,16 +1,16 @@
-interface Animal {
-  name: string;
-  age: number;
-}
 interface Human {
   name: string;
   age: number;
+}
+interface Contacts {
+  phone: string;
   address: string;
 }
-
-type AnimalHuman = Animal | Human;
-const temp: AnimalHuman = {
-  address: "대구",
-  age: 20,
+type HumanContacts = Human & Contacts;
+// 반드시 모든 속성이 존재해야 한다.
+let jeny: HumanContacts = {
+  address: "서울",
+  age: 28,
   name: "제니",
+  phone: "000",
 };
