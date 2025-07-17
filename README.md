@@ -1,99 +1,226 @@
-# ts 심화 - Union
+# ts 심화 - Narrowing(내로잉)
 
-- 타입을 하나로 병합할 수 있는 방법
+- 타입을 점차적으로 구체화
+- 타입 좁히기
 
 ```ts
-type StringNumberType = string | number;
+// number이거나 string일 수 있음
+let numString: number | string = "로제";
+// 자동으로 number를 제거하고 string으로 판단
+// 이것을 narrowing 즉, 타입 좁히기라고 함
 
-let strVar: StringNumberType = "hi";
-strVar = 300;
-
-type NetworkStatus = "DONE" | "LOADING" | "ERROR" | "INIT";
-let state: NetworkStatus = "DONE";
-state = "ERROR";
-state = "LOADING";
-state = "INIT";
-
-type StringNumberArray = string[] | number[];
-let arr: StringNumberArray = [1, 2, 3];
-arr = ["hello", "hi"];
+// let numString: string
+numString;
+// 위의 변수는 string으로 판정이 되므로 아래 문장이 오류가 발생함
+numString.toFixed(2); // number 타입이 아니라서 오류 발생
 ```
 
-```js
+## 타입 좁히기 8개 방안
+
+### 1. Assingment Narrowing
+
+- 유니온 타입에서 `초기값을 세팅해서 할당하여 결정`함
+
+```ts
+// 초기값으로 string을 할당함
+let numString: number | string = "로제";
+numString; // string
+```
+
+### 2. typeof Narrowing
+
+- `typeof 연산자`를 사용하여 타입을 좁혀줌
+
+```ts
+numString = Math.random() > 0.5 ? 500 : "리사";
+if (typeof numString === "string") {
+  // 글자예요.
+  numString; // let numString: string
+} else {
+  // 숫자예요.
+  numString; // let numString: number
+}
+```
+
+### 3. Truthiness Narrowing
+
+- null, 0, undifined, "", NaN, false
+
+```ts
+let nullOrString: null | string[];
+nullOrString = Math.random() > 0.5 ? null : ["지수", "제니"];
+// if로 참인 것을 거르고 처리
+if (nullOrString) {
+  // 글자배열
+  nullOrString; // let nullOrString: stirng[]
+} else {
+  // null이다.
+  nullOrString; // let nullOrString: null
+}
+```
+
+### 4. Equality Narrowing
+
+- 비교연산자를 이용한다
+
+```ts
+let numOrString: number | string = Math.random() > 0.5 ? 100 : "로제";
+let stringOrBoolean: string | boolean = Math.random() > 0.5 ? "리사" : true;
+
+// js에서는 불가능하지만 ts에서는 가능하다
+if (numOrString === stringOrBoolean) {
+  // numOrString: string === stringOrboolean: string
+  numOrString; // let numOrString: stirng
+  stringOrBoolean; // let stringOrboolean: string
+} else {
+  numOrString; // let numOrString: stirng | number
+  stringOrBoolean; // let stringOrBoolean: string | true
+}
+```
+
+### 5. in Operator Narrowing
+
+- in 연산자를 이용하여 타입 좁히기
+- 객체의 속성을 추출하는 용도
+- 보통 많은 개발자가 `type`이라는 속성을 많이 활용
+
+```ts
+interface Human {
+  name: string;
+  age: number;
+}
+interface Dog {
+  name: string;
+  type: string;
+}
+let h: Human = { name: "제니", age: 28 };
+let d: Dog = { name: "별이", type: "비숑" };
+
+let result: Human | Dog = Math.random() > 0.5 ? h : d;
+// in 연산자를 이용해서 타입을 구체화 즉, 타입 좁히기를 실행하자
+// console.log("age" in result);
+// console.log("name" in result);
+// console.log("type" in result);
+if ("type" in result) {
+  result; // let result: Dog
+} else {
+  result; // let result: Human
+}
+```
+
+### 6. instanceof Narrowing
+
+- new 클래스명()로 만들어진 변수를 인스턴스 변수라고 합니다.
+
+```ts
+let dateOrString: Date | string = Math.random() > 0.5 ? new Date() : "제니";
+// new로 생성된 것만 가능함
+if (dateOrString instanceof Date) {
+  dateOrString; // let dateOrString: Date
+} else {
+  dateOrString; // let dateOrString: string
+}
+```
+
+### 7. Discriminated Narrowing
+
+- 차별된 유니온 내로잉
+- 유니온 타입에서 `특정 속성을 사용`해서 타입 좁히기
+- 불완전하게 타입을 좁힌 경우
+
+```ts
 interface Animal {
-  name: string;
-  age: number;
+  type: "dog" | "human";
+  // 사람일 때만 사용할 수 있다.
+  height?: number;
+  // 강아지일 때만 사용할 수 있다.
+  breed?: string;
 }
-interface Human {
-  name: string;
-  age: number;
-  address: string;
-}
+let result: Animal =
+  Math.random() > 0.5
+    ? { type: "human", height: 180 }
+    : { type: "dog", breed: "비숑" };
 
-type AnimalHuman = Animal | Human;
-/**
- * 하나의 타입으로 합쳐진다.
- * {
- *  name: string;
- *  age: number;
- *  address: string;
- * }
- * */
-const temp: AnimalHuman = {
-  address: "대구",
-  age: 20,
-  name: "제니",
-};
+// 상당히 좋지 않게 코드 분기를 하였음
+// 개선이 필요함
+if (result.type === "human") {
+  result;
+  result.height;
+} else {
+  result;
+  result.breed;
+}
 ```
 
-- type 여러개도 union
-
-```ts
-type Animal = {
-  name: string;
-  age: number;
-};
-type Human = {
-  name: string;
-  age: number;
-  address: string;
-};
-
-type AnimalHuman = Animal | Human;
-/**
- * 여러개의 타입을 하나로 합침
- * {
- *  name: string;
- *  age: number;
- *  address: string;
- * }
- */
-const temp: AnimalHuman = {
-  address: "대구",
-  age: 20,
-  name: "제니",
-};
-```
-
-# ts 심화 - Intersection
-
-- 여러개의 타입을 모두 만족하는 타입을 만든다.
+- 개선한 코드
 
 ```ts
 interface Human {
-  name: string;
-  age: number;
+  type: "human";
+  height: number;
 }
-interface Contacts {
-  phone: string;
-  address: string;
+interface Dog {
+  type: "dog";
+  breed: string;
 }
-type HumanContacts = Human & Contacts;
-// 반드시 모든 속성이 존재해야 한다.
-let jeny: HumanContacts = {
-  address: "서울",
-  age: 28,
-  name: "제니",
-  phone: "000",
-};
+
+type Animal = Human | Dog;
+
+let result: Animal =
+  Math.random() > 0.5
+    ? { type: "human", height: 180 }
+    : { type: "dog", breed: "비숑" };
+
+// 상당히 좋지 않게 코드 분기를 하였음
+// 개선이 필요함
+if (result.type === "human") {
+  result; // let result: Human
+  result.height;
+} else {
+  result; // let result: Dog
+  result.breed;
+}
+```
+
+### 8. Existential Narrowing
+
+- 존재하는 값을 사용해서 타입 구체화 즉, 타입 좁히기
+- Switch Case문을 사용함
+
+```ts
+interface Human {
+  type: "human";
+  height: number;
+}
+interface Dog {
+  type: "dog";
+  breed: string;
+}
+
+interface cat {
+  type: "cat";
+  koo: string;
+}
+
+type Animal = Human | Dog | cat;
+
+let result: Animal =
+  Math.random() > 0.5
+    ? { type: "human", height: 180 }
+    : Math.random() > 0.5
+    ? { type: "dog", breed: "비숑" }
+    : { type: "cat", koo: "꾹꾹이" };
+
+// 개발자가 만든 type 속성을 이용해서 처리
+switch (result.type) {
+  case "human":
+    result; // let result: Human
+    break;
+  case "dog":
+    result; // let result: Dog
+    break;
+  case "cat":
+    result; // let result: Dog
+    break;
+}
 ```
