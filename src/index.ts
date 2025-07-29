@@ -1,15 +1,9 @@
-class NumberPagination<T, K> {
-  // 필수속성
-  data: T[] = [];
-  message?: K;
-  lastFetchAt?: Date;
-
-  // new 하면 실행될 생성자 함수
-  constructor(data: T[], message?: K, lastFetchAt?: Date) {
-    this.data = data;
-    this.message = message;
-    this.lastFetchAt = lastFetchAt;
-  }
-}
-
-const a = new NumberPagination<string, number>(["제니", "로제"], 2025);
+type JENNIE = "Jen";
+type Upper = Uppercase<JENNIE>;
+// type Upper = "JEN"
+type Lower = Lowercase<JENNIE>;
+// type Lower = "jen"
+type Capital = Capitalize<JENNIE>;
+// type Capital = "Jen"
+type UnCaptial = Uncapitalize<JENNIE>;
+// type UnCaptial = "jen"
