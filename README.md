@@ -1,13 +1,13 @@
-# ts-심화 - 제네릭
+# ts 심화 - 제네릭
 
 - 나중에 타입을 결정한다.
-- `타입 변수`
-- any 타입에서 효과를 발휘함
+- `타입 변수` 입니다.
+- any 타입에서 효과를 발휘한다.
 
 ## 1. 함수에서 제네릭 사용하기
 
-- 매개변수 종류가 무엇인지 모르겠다.
-- any를 선호하더라
+- 매개변수가 종류가 무엇인지 모르겠다.
+- any 를 선호하더라
 
 ```ts
 function whatValue(value: any) {
@@ -17,8 +17,8 @@ function whatValue(value: any) {
 const result = whatValue("안녕");
 ```
 
-- any 타입은 `아무거나 다 된다`라는 의미임
-- `리턴이 되는 값이 타입도 any가 되어서 정확하지 않음`
+- any 타입은 `아무거나 다 된다` 라는 의미임.
+- `리턴이 되는 값이 타입도 any 가 되어서 정확하지 않다.`
 - 아래의 경우는 문제가 된다.
 
 ```ts
@@ -34,7 +34,7 @@ const resultNum = whatValue(123);
 resultNum.toUpperCase(); // Error: 대문자로 바꾸기, 문제발생
 ```
 
-- 위의 문제를 해결하기 위해서 `제네릭`을 이용해서 해결하자
+- 위의 문제를 해결하기 위해서 `제네릭`을 이용해서 해결하자.
 
 ```ts
 function whatValue<T>(value: T): T {
@@ -45,13 +45,13 @@ function whatValue<T>(value: T): T {
 const result = whatValue("abc");
 result.toUpperCase(); // 대문자로 바꾸기, 문제없음
 
-// 숫자라서 오류발생
+// 숫자라서 오류발생 코딩 중에 발견
 // const resultNum: 123
 const resultNum = whatValue(123);
 resultNum.toUpperCase(); // Error: 대문자로 바꾸기, 문제발생
 ```
 
-- VSCode가 실시간으로 타입추론 잘 해줌
+- VSCode 가 실시간으로 타입추론 잘 해줌.
 
 ## 2. 함수에서 제네릭을 여러개 사용하기
 
@@ -61,11 +61,11 @@ function mulitiFun<T, K>(a: T, b: K): { a: T; b: K } {
 }
 /**
  * const result: {
-    a: string;
-    b: number;
+      a: string;
+      b: number;
   }
  */
-const result = mulitiFun("jennie", 20);
+const result = mulitiFun("iu", 20);
 ```
 
 ## 문제 풀이
@@ -91,12 +91,12 @@ interface Person {
   age: number;
 }
 const me: Person = {
-  name: "제니",
+  name: "아이유",
   age: 28,
 };
 ```
 
-- 제네릭으로 전달해보기
+- 제네릭으로 전달해 보기
 
 ```ts
 interface Person<T> {
@@ -104,7 +104,7 @@ interface Person<T> {
   age: number;
 }
 const me: Person<string> = {
-  name: "제니",
+  name: "아이유",
   age: 28,
 };
 ```
@@ -126,7 +126,7 @@ const p: DateCache<number> = {
 };
 ```
 
-## 4. 모든 제네릭에 기본 종류 지정해주기
+## 4. 모든 제네릭에 기본 종류 지정해 주기
 
 ```ts
 interface DateCache<T = string> {
@@ -149,6 +149,7 @@ const p: DateCache<number> = {
 
 ```ts
 type MyType<T> = T;
+
 const m: MyType<string> = "안녕";
 const a: MyType<number> = 28;
 ```
@@ -176,7 +177,7 @@ class NumberPagination<T, K> {
   lastFetchAt?: Date;
 }
 
-const a = new NumberPagination();
+const a = new NumberPagination<string, number>();
 ```
 
 ## 7. 생성자 함수에서 제네릭 활용하기
@@ -196,8 +197,112 @@ class NumberPagination<T, K> {
   }
 }
 
-const a = new NumberPagination<string, number>(["제니", "로제"], 2025);
+const a = new NumberPagination<string, number>(["아이유", "지민"], 2025);
 ```
 
 ## 8. 상속에서 제네릭 활용하기
 
+```ts
+class Base<T> {
+  // 필수 속성
+  data: T[];
+  // 인스턴스 생성 함수
+  constructor() {}
+}
+const a = new Base<string>();
+const b = new Base<number>();
+```
+
+- 상속의 예
+
+```ts
+// T : 제네릭 (타입용 변수)
+class Base<T> {
+  // 필수 속성
+  data: T[];
+  // 인스턴스 생성 함수
+  constructor() {}
+}
+class Child<T> extends Base<T> {
+  // 인스턴스 생성 함수
+  constructor() {
+    // 상속받은 경우는 Base 도 new 를 해야 합니다.
+    super();
+  }
+}
+const a = new Child<string>();
+```
+
+## 9. 메소드에서 제네릭 활용하기
+
+```ts
+class Idol<T> {
+  // 필수 속성
+  id: T;
+  name: string;
+  // 인스턴스 생성 함수
+  constructor() {}
+  // 메소드
+  sayHello<K>(year: K) {
+    return `${year}해에 인사합니다.`;
+  }
+}
+const a = new Idol<string>();
+a.sayHello(2025);
+```
+
+## 10. Implemetation 에서 제네릭 활용하기
+
+```ts
+interface Singer<T, K> {
+  name: T;
+  sing(year: K): void;
+}
+class Idol implements Singer<string, number> {
+  name: string;
+  sing(year: number): void {}
+}
+```
+
+## 11. Promise (비동기) 에서 제네릭 활용하기
+
+- Promise 예제
+
+```js
+const afterTwoSeconds = function () {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 성공시 실행할 함수
+      resolve("성공이므로 실행함");
+    }, 2000);
+  });
+};
+
+const runner = async () => {
+  const res = await afterTwoSeconds();
+  console.log(res);
+};
+
+runner();
+```
+
+- ts 적용
+
+```ts
+// fetch 또는 axios 를 이용해서 데이터를 연동시 엄청 자주 활용됨
+const afterTwoSeconds = function (): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 성공시 실행할 함수
+      resolve("성공이므로 실행함");
+    }, 2000);
+  });
+};
+
+const runner = async () => {
+  const res = await afterTwoSeconds();
+  console.log(res);
+};
+
+runner();
+```
